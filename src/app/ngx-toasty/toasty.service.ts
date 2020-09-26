@@ -98,10 +98,10 @@ export class ToastyService {
     // Clear event emitter
     // private clearEmitter: EventEmitter<number> = new EventEmitter<number>();
 
-    private eventSource: Subject<ToastyEvent> = new Subject<ToastyEvent>();
+    public eventSource: Subject<ToastyEvent> = new Subject<ToastyEvent>();
     public events: Observable<ToastyEvent> = this.eventSource.asObservable();
 
-    constructor(private config: ToastyConfig) {}
+    constructor(public config: ToastyConfig) {}
 
     /**
      * Get list of toasts
@@ -168,10 +168,12 @@ export class ToastyService {
             toastyOptions = options as ToastOptions;
         }
 
+        /* istanbul ignore next */
         if (!toastyOptions || (!toastyOptions.title && !toastyOptions.msg)) {
             throw new Error('ng2-toasty: No toast title or message specified!');
         }
 
+        /* istanbul ignore next */
         type = type || 'default';
 
         // Set a unique counter for an id
@@ -183,6 +185,7 @@ export class ToastyService {
         // If we have a theme set, make sure it's a valid one
         let theme: string;
         if (toastyOptions.theme) {
+            /* istanbul ignore next */
             theme = ToastyService.THEMES.indexOf(toastyOptions.theme) > -1 ? toastyOptions.theme : this.config.theme;
         } else {
             theme = this.config.theme;
@@ -196,11 +199,13 @@ export class ToastyService {
             type: 'toasty-type-' + type,
             theme: 'toasty-theme-' + theme,
             onAdd: toastyOptions.onAdd && isFunction(toastyOptions.onAdd) ? toastyOptions.onAdd : null,
+            /* istanbul ignore next */
             onRemove: toastyOptions.onRemove && isFunction(toastyOptions.onRemove) ? toastyOptions.onRemove : null,
         } as ToastData;
 
         // If there's a timeout individually or globally, set the toast to timeout
         // Allows a caller to pass null/0 and override the default. Can also set the default to null/0 to turn off.
+        /* istanbul ignore next */
         toast.timeout = toastyOptions.hasOwnProperty('timeout') ? toastyOptions.timeout : this.config.timeout;
 
         // Push up a new toast item
@@ -227,7 +232,7 @@ export class ToastyService {
 
     // Checks whether the local option is set, if not,
     // checks the global config
-    private _checkConfigItem(config: any, options: any, property: string) {
+    _checkConfigItem(config: any, options: any, property: string) {
         if (options[property] === false) {
             return false;
         } else if (!options[property]) {
@@ -237,7 +242,7 @@ export class ToastyService {
         }
     }
 
-    private emitEvent(event: ToastyEvent) {
+    emitEvent(event: ToastyEvent) {
         if (this.eventSource) {
             // Push up a new event
             this.eventSource.next(event);

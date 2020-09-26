@@ -1,7 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { ToastData, ToastOptions, ToastyConfig, ToastyEvent, ToastyService } from './toasty.service';
+import { ToastData, ToastOptions, ToastyConfig, ToastyEvent, ToastyEventType, ToastyService } from './toasty.service';
 
 describe('ToastyService', () => {
+
+    const toastOptions: ToastOptions = {
+        title: 'title1',
+        msg: 'message1',
+        showClose: false,
+        theme: 'toasty-theme-default',
+        timeout: null,
+        onAdd: null,
+        onRemove: {} as any,
+    };
     let toastyService: ToastyService;
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -16,9 +26,43 @@ describe('ToastyService', () => {
         expect(toastyService instanceof ToastyService).toBeTruthy();
     });
 
-    // it('should return Observable from getToasts method', () => {
-    //     expect(toastyService.events instanceof Observable);
-    // });
+    it('should call emitEvent when clearAll is called', () => {
+        spyOn(toastyService, 'emitEvent');
+
+        toastyService.clearAll();
+
+        expect(toastyService.emitEvent).toHaveBeenCalledTimes(1);
+        expect(toastyService.emitEvent).toHaveBeenCalledWith(new ToastyEvent(ToastyEventType.CLEAR_ALL));
+    });
+
+    it('should call emitEvent when clear is called', () => {
+        spyOn(toastyService, 'emitEvent');
+
+        toastyService.clear(101);
+
+        expect(toastyService.emitEvent).toHaveBeenCalledTimes(1);
+        expect(toastyService.emitEvent).toHaveBeenCalledWith(new ToastyEvent(ToastyEventType.CLEAR, 101));
+    });
+
+    it('should not do anything if we do not have an eventSource when calling emitEvent ', () => {
+        toastyService.eventSource = null;
+
+        toastyService.emitEvent(new ToastyEvent(ToastyEventType.CLEAR, 101));
+
+        expect(toastyService.eventSource).toBeNull();
+    });
+
+    it(`should return true if we found the option`, () => {
+        const actualResults =  toastyService._checkConfigItem(toastyService.config, toastOptions, 'msg');
+
+        expect(actualResults).toEqual(true);
+    });
+
+    it(`should return false if the value of the option is false`, () => {
+        const actualResults =  toastyService._checkConfigItem(toastyService.config, toastOptions, 'showClose');
+
+        expect(actualResults).toEqual(false);
+    });
 
     describe('create default toasty', () => {
         it('with string title', () => {

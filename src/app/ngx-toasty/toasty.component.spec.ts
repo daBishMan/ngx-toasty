@@ -259,31 +259,4 @@ describe('ToastyComponent', () => {
         componentFixture.detectChanges();
         expect(element.querySelector('#toasty').children.length).toBe(1);
     });
-
-    describe('work with timeout', () => {
-        // function createComponent(testComponentBuilder: TestComponentBuilder): Promise<ComponentFixture> {
-        //     return testComponentBuilder.createAsync(ToastyContainer).then((cf:ComponentFixture) => {
-        //         cf.detectChanges();
-        //         return cf;
-        //     });
-        // }
-        // it('should close toast after timeout', inject([TestComponentBuilder],
-        //     fakeAsync((testComponentBuilder:TestComponentBuilder) => {
-        //         createComponent(testComponentBuilder).then((fixture:ComponentFixture) => {
-        //             const element = fixture.nativeElement;
-        //             toast1.onRemove = (toast:Toast) => {
-        //                 expect(toast).toBe(toast1);
-        //             };
-        //             toast1.timeout = 1000;
-        //             fixture.componentInstance.toasts.push(toast1);
-        //             fixture.componentInstance.toasts.push(toast2);
-        //             fixture.detectChanges();
-        //             expect(element.querySelector('#toasty').children.length).toBe(2);
-        //             tick();
-        //             fixture.detectChanges();
-        //             expect(element.querySelector('#toasty').children.length).toBe(1);
-        //         });
-        //     })
-        // ));
-    });
 });
