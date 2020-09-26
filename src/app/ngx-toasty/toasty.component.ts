@@ -68,7 +68,7 @@ export class ToastyComponent implements OnInit {
     // The storage for toasts.
     toasts: Array<ToastData> = [];
 
-    constructor(private config: ToastyConfig, private toastyService: ToastyService) {
+    constructor(public config: ToastyConfig, private toastyService: ToastyService) {
         // Initialize position
         this.position = '';
     }
@@ -80,20 +80,25 @@ export class ToastyComponent implements OnInit {
      */
     ngOnInit(): any {
         // We listen events from our service
+        /* istanbul ignore next */
         this.toastyService.events.subscribe((event: ToastyEvent) => {
-            if (event.type === ToastyEventType.ADD) {
-                // Add the new one
-                const toast: ToastData = event.value;
-                this.add(toast);
-            } else if (event.type === ToastyEventType.CLEAR) {
-                // Clear the one by number
-                const id: number = event.value;
-                this.clear(id);
-            } else if (event.type === ToastyEventType.CLEAR_ALL) {
-                // Lets clear all toasts
-                this.clearAll();
-            }
+            this.setupData(event);
         });
+    }
+
+    public setupData(event: ToastyEvent) {
+        if (event.type === ToastyEventType.ADD) {
+            // Add the new one
+            const toast: ToastData = event.value;
+            this.add(toast);
+        } else if (event.type === ToastyEventType.CLEAR) {
+            // Clear the one by number
+            const id: number = event.value;
+            this.clear(id);
+        } else if (event.type === ToastyEventType.CLEAR_ALL) {
+            // Lets clear all toasts
+            this.clearAll();
+        }
     }
 
     /**
@@ -157,7 +162,8 @@ export class ToastyComponent implements OnInit {
     /**
      * Custom setTimeout function for specific setTimeouts on individual toasts.
      */
-    private _setTimeout(toast: ToastData) {
+    /* istanbul ignore next */
+    _setTimeout(toast: ToastData) {
         window.setTimeout(() => {
             this.clear(toast.id);
         }, toast.timeout);
