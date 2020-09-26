@@ -140,4 +140,13 @@ describe('ToastComponent', () => {
         componentFixture.componentInstance.toast.title = null;
         componentFixture.componentInstance.toast.msg = null;
     });
+
+    it(`should call next on  the closeToastEvent when close function is called`, () => {
+        spyOn(componentFixture.componentInstance.closeToastEvent, 'next');
+        componentFixture.detectChanges();
+
+        componentFixture.componentInstance.close(new Event('ButtonClick'));
+
+        expect(componentFixture.componentInstance.closeToastEvent.next).toHaveBeenCalledTimes(1);
+    });
 });
